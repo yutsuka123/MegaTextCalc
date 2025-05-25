@@ -188,16 +188,14 @@ class FirstFragment : Fragment() {
             formattedResult = formatter.format(result)
         }
 
+        // 計算式の表示を保持（バグ修正）
+        val expressionText = "$firstOperand $operator $secondOperand"
+        binding.textviewExpression.text = expressionText
+
         // 結果を画面に表示し、次の計算のために状態を更新
         binding.textviewResult.text = formattedResult
         currentInput = formattedResult
         firstOperand = result
-        updateExpression()
-    }
-
-    private fun updateDisplay() {
-        // 結果表示の更新
-        binding.textviewResult.text = if (currentInput.isEmpty()) "0" else currentInput
     }
 
     private fun updateExpression() {
@@ -208,6 +206,11 @@ class FirstFragment : Fragment() {
             "$firstOperand $operator ${if (isOperatorClicked) "" else currentInput}"
         }
         binding.textviewExpression.text = expression
+    }
+
+    private fun updateDisplay() {
+        // 結果表示の更新
+        binding.textviewResult.text = if (currentInput.isEmpty()) "0" else currentInput
     }
 
     private fun resetCalculator() {
