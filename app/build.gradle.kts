@@ -1,6 +1,63 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("com.android.application")
+    kotlin("android")
+    kotlin("kapt")
+}
+
+group = "com.example.megatextcalc"
+version = "1.0"
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
+
+    // Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.47")
+    kapt("com.google.dagger:hilt-android-compiler:2.47")
+
+    // Room
+    implementation("androidx.room:room-ktx:2.5.2")
+    implementation("androidx.room:room-runtime:2.5.2")
+    kapt("androidx.room:room-compiler:2.5.2")
+
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    kapt("androidx.lifecycle:lifecycle-compiler:2.6.2")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.4.0")
+
+    // OkHttp/Retrofit
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
+
+    // Jetpack Compose
+    implementation("androidx.compose.ui:ui:1.5.4")
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.4")
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+    implementation("androidx.compose.foundation:foundation-layout:1.5.4")
+    implementation("androidx.compose.runtime:runtime:1.5.4")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation("androidx.compose.material:material:1.6.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
+
+    // Wear OS
+    implementation("androidx.wear.compose:compose-foundation:1.2.0")
+    implementation("androidx.wear.compose:compose-navigation:1.2.0")
+
+    // テスト
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
 
 android {
@@ -41,27 +98,5 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"  // Updated from 1.5.0 to work with Kotlin 1.9.20
     }
-}
-
-dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation("androidx.compose.ui:ui:1.5.4")  // Updated from 1.5.0
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.5.4")  // Updated from 1.5.0
-    implementation("androidx.wear.compose:compose-foundation:1.2.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")  // Updated from 1.5.0
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    // 既存の ui/ui-tooling-preview/foundation/foundation-layout はそのまま
-    implementation ("androidx.compose.material:material:1.6.0")
-    // デバッグ用ツール
-    debugImplementation ("androidx.compose.ui:ui-tooling:1.6.0")
 }
 
