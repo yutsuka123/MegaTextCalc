@@ -2,10 +2,32 @@
     <string name="app_name">MegaTextCalc</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
+    <string name="first_fragment_label">電卓</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <!-- Calculator strings -->
+    <string name="calc_input_hint">式を入力</string>
+    <string name="calc_result_default">0</string>
+    <string name="calc_btn_0">0</string>
+    <string name="calc_btn_1">1</string>
+    <string name="calc_btn_2">2</string>
+    <string name="calc_btn_3">3</string>
+    <string name="calc_btn_4">4</string>
+    <string name="calc_btn_5">5</string>
+    <string name="calc_btn_6">6</string>
+    <string name="calc_btn_7">7</string>
+    <string name="calc_btn_8">8</string>
+    <string name="calc_btn_9">9</string>
+    <string name="calc_btn_plus">+</string>
+    <string name="calc_btn_minus">-</string>
+    <string name="calc_btn_multiply">×</string>
+    <string name="calc_btn_divide">÷</string>
+    <string name="calc_btn_equals">=</string>
+    <string name="calc_btn_clear">C</string>
+    <string name="calc_btn_decimal">.</string>
+    <string name="calc_error">エラー</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -44,3 +66,4 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
 </resources>
+
