@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.megatextcalc.databinding.FragmentFirstBinding
+import com.example.megatextcalc.util.SoundPlayer
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
@@ -20,6 +21,7 @@ class FirstFragment : Fragment() {
     private var operator = ""
     private var isOperatorClicked = false
     private var isCalculated = false
+    private var lastExpression = "" // 最後の計算式を保持
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +68,7 @@ class FirstFragment : Fragment() {
         // 各数字ボタンにクリックリスナーを設定
         for ((button, digit) in numberButtons) {
             button.setOnClickListener {
+                SoundPlayer.playAsset(requireContext(), "$digit.mp3")
                 // 計算後に数字をタップした場合は表示をリセット
                 if (isCalculated) {
                     resetCalculator()
@@ -87,6 +90,7 @@ class FirstFragment : Fragment() {
     private fun setupDecimalButton() {
         // 小数点ボタンの設定
         binding.btnDecimal.setOnClickListener {
+            SoundPlayer.playAsset(requireContext(), "dot.mp3")
             // 計算後に小数点をタップした場合は表示をリセット
             if (isCalculated) {
                 resetCalculator()
@@ -120,19 +124,36 @@ class FirstFragment : Fragment() {
         // 各演算子ボタンにクリックリスナーを設定
         for ((button, op) in operatorButtons) {
             button.setOnClickListener {
-                if (currentInput.isNotEmpty() || operator.isNotEmpty()) {
-                    // 既に演算子が選択されている場合は前の計算を実行
-                    if (operator.isNotEmpty() && !isOperatorClicked && currentInput.isNotEmpty()) {
-                        calculateResult()
-                    }
+                val soundFile = when (op) {
+                    "+" -> "plus.mp3"
+                    "-" -> "minus.mp3"
+                    "×" -> "multiply.mp3"
+                    "÷" -> "divide.mp3"
+                    else -> "$op.mp3"
+                }
+                SoundPlayer.playAsset(requireContext(), soundFile)
 
-                    // 新しい演算子を設定
-                    if (currentInput.isNotEmpty()) {
+                if (currentInput.isNotEmpty()) {
+                    // イコール押下後なら前の計算結果を使用
+                    if (isCalculated) {
+                        firstOperand = currentInput.toDouble()
+                        isCalculated = false
+                    }
+                    // 前の演算子が入力済みで、第二項も入力済みなら計算実行
+                    else if (operator.isNotEmpty() && !isOperatorClicked) {
+                        val secondOperand = currentInput.toDouble()
+                        // 計算式を先に保持
+                        lastExpression = "$firstOperand $operator $secondOperand"
+                        calculateResult()
+                        // ここでfirstOperandは既に新しい結果に更新されている
+                    }
+                    // 新しい式の第一項が入力中なら、それを使用
+                    else if (operator.isEmpty()) {
                         firstOperand = currentInput.toDouble()
                     }
+
                     operator = op
                     isOperatorClicked = true
-                    isCalculated = false
                     updateExpression()
                 }
             }
@@ -145,6 +166,7 @@ class FirstFragment : Fragment() {
             resetCalculator()
             updateDisplay()
             updateExpression()
+            SoundPlayer.playAsset(requireContext(), "clear.mp3")
         }
     }
 
@@ -154,6 +176,12 @@ class FirstFragment : Fragment() {
             if (currentInput.isNotEmpty() && operator.isNotEmpty()) {
                 calculateResult()
                 isCalculated = true
+                // play '=' then random cat then answer
+                SoundPlayer.playAsset(requireContext(), "equal.mp3") {
+                    SoundPlayer.playAsset(requireContext(), SoundPlayer.getRandomCatSound(requireContext())) {
+                        SoundPlayer.playAnswerFlexible(requireContext(), currentInput) {}
+                    }
+                }
             }
         }
     }
@@ -162,6 +190,11 @@ class FirstFragment : Fragment() {
         // 計算処理
         val secondOperand = currentInput.toDouble()
         var result = 0.0
+
+        // 計算式を更新（バグ修正）
+        if (lastExpression.isEmpty()) {
+            lastExpression = "$firstOperand $operator $secondOperand"
+        }
 
         when (operator) {
             "+" -> result = firstOperand + secondOperand
@@ -177,7 +210,7 @@ class FirstFragment : Fragment() {
             }
         }
 
-        // 結果を表示
+        // フォーマット処理（結果表示用）
         val formatter = DecimalFormat("#.##########")
         val formattedResult: String
 
@@ -188,11 +221,8 @@ class FirstFragment : Fragment() {
             formattedResult = formatter.format(result)
         }
 
-        // 計算式の表示を保持（バグ修正）
-        val expressionText = "$firstOperand $operator $secondOperand"
-        binding.textviewExpression.text = expressionText
-
-        // 結果を画面に表示し、次の計算のために状態を更新
+        // 結果と式を表示（式は前の計算を保持）
+        binding.textviewExpression.text = lastExpression
         binding.textviewResult.text = formattedResult
         currentInput = formattedResult
         firstOperand = result
@@ -202,6 +232,9 @@ class FirstFragment : Fragment() {
         // 式の表示を更新
         val expression = if (operator.isEmpty()) {
             currentInput
+        } else if (isCalculated) {
+            // 計算後なら保存された式を表示
+            lastExpression
         } else {
             "$firstOperand $operator ${if (isOperatorClicked) "" else currentInput}"
         }
@@ -220,6 +253,7 @@ class FirstFragment : Fragment() {
         operator = ""
         isOperatorClicked = false
         isCalculated = false
+        lastExpression = ""
         binding.textviewResult.text = "0"
         binding.textviewExpression.text = ""
     }

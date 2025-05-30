@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.0" # Downgraded to be more compatible with Kotlin 1.9.20
+agp = "8.10.1" # Downgraded to be more compatible with Kotlin 1.9.20
 kotlin = "1.9.20" # Downgraded to stable version that works with Compose Multiplatform
 coreKtx = "1.10.1"
 junit = "4.13.2"
