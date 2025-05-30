@@ -14,6 +14,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
+    // Google Play Billing
+    implementation("com.android.billingclient:billing-ktx:7.0.0")
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.47")

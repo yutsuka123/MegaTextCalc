@@ -126,7 +126,7 @@ class FirstFragment : Fragment() {
             button.setOnClickListener {
                 val soundFile = when (op) {
                     "+" -> "plus.mp3"
-                    "-" -> "minus.mp3"
+                    "-" -> "-.mp3"  // 引き算演算子は-.mp3を使用
                     "×" -> "multiply.mp3"
                     "÷" -> "divide.mp3"
                     else -> "$op.mp3"
