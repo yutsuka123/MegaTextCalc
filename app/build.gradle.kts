@@ -4,7 +4,7 @@ plugins {
     kotlin("kapt")
 }
 
-group = "com.example.megatextcalc"
+group = "com.nyangailab.nyancalc"
 version = "1.0"
 
 dependencies {
@@ -14,6 +14,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
+    implementation("androidx.navigation:navigation-compose:2.7.3")
     // Google Play Billing
     implementation("com.android.billingclient:billing-ktx:7.0.0")
 
@@ -63,15 +64,15 @@ dependencies {
 }
 
 android {
-    namespace = "com.example.megatextcalc"
+    namespace = "com.nyangailab.nyancalc"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.megatextcalc"
+        applicationId = "com.nyangailab.nyancalc"
         minSdk = 25
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3 // 以前の11102から変更
+        versionName = "1.1.1-beta03" // 以前のver1.1.1Beta02から変更
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

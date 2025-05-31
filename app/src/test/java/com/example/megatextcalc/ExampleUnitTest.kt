@@ -1,4 +1,4 @@
-package com.example.megatextcalc
+package com.nyangailab.nyancalc
 
 import org.junit.Test
 
