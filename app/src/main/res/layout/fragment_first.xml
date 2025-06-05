@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.25" />
+        app:layout_constraintHeight_percent="0.2" />
 
     <!-- 結果の表示領域 -->
     <TextView
@@ -31,262 +31,294 @@
         android:textSize="72sp"
         android:textStyle="bold"
         android:text="@string/calc_result_default"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+        app:layout_constraintBottom_toTopOf="@+id/calculator_buttons_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_expression"
-        app:layout_constraintHeight_percent="0.25" />
+        app:layout_constraintHeight_percent="0.2" />
 
-    <!-- 電卓ボタン領域 -->
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="match_parent"
+    <!-- 
+    修正：電卓ボタン領域をLinearLayoutの階層構造に変更
+    - GridLayoutの代わりにLinearLayoutを使用して重なり問題を解決
+    - 各行と列で確実なweight配分を実現
+    - 様々な画面サイズでの安定性を向上
+    - 最下行表示問題対策：paddingBottomとConstraint調整で安全な表示領域を確保
+    -->
+    <LinearLayout
+        android:id="@+id/calculator_buttons_container"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:columnCount="4"
-        android:rowCount="5"
-        android:padding="1dp"
+        android:orientation="vertical"
+        android:padding="4dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_result"
-        app:layout_constraintHeight_percent="0.55">
+        app:layout_constraintHeight_percent="0.58">
 
         <!-- 1行目: C (2列幅), 空, ÷ -->
-        <Button
-            android:id="@+id/btn_clear"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_columnSpan="2"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_clear"
-            app:cornerRadius="10dp" />
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1" />
+            <Button
+                android:id="@+id/btn_clear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_clear"
+                app:cornerRadius="10dp" />
 
-        <Button
-            android:id="@+id/btn_divide"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_divide"
-            app:cornerRadius="10dp" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_divide"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_divide"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
 
         <!-- 2行目: 7, 8, 9, × -->
-        <Button
-            android:id="@+id/btn_7"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_7"
-            app:cornerRadius="10dp" />
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_8"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_8"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_7"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_7"
+                app:cornerRadius="10dp" />
 
-        <Button
-            android:id="@+id/btn_9"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_9"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_8"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_8"
+                app:cornerRadius="10dp" />
 
-        <Button
-            android:id="@+id/btn_multiply"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_multiply"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_9"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_9"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btn_multiply"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_multiply"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
 
         <!-- 3行目: 4, 5, 6, - -->
-        <Button
-            android:id="@+id/btn_4"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_4"
-            app:cornerRadius="10dp" />
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_5"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_5"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_4"
+                app:cornerRadius="10dp" />
 
-        <Button
-            android:id="@+id/btn_6"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_6"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_5"
+                app:cornerRadius="10dp" />
 
-        <Button
-            android:id="@+id/btn_minus"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_minus"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_6"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btn_minus"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_minus"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
 
         <!-- 4行目: 1, 2, 3, + -->
-        <Button
-            android:id="@+id/btn_1"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_1"
-            app:cornerRadius="10dp" />
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_2"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_1"
+                app:cornerRadius="10dp" />
 
-        <Button
-            android:id="@+id/btn_3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_3"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_2"
+                app:cornerRadius="10dp" />
 
-        <Button
-            android:id="@+id/btn_plus"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_plus"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_3"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btn_plus"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_plus"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
 
         <!-- 5行目: 0, ., =（2ボタン分の幅） -->
-        <Button
-            android:id="@+id/btn_0"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_0"
-            app:cornerRadius="10dp" />
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_decimal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_decimal"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_0"
+                app:cornerRadius="10dp" />
 
-        <!-- イコールボタン（2列分の幅） -->
-        <Button
-            android:id="@+id/btn_equal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_columnSpan="2"
-            android:layout_margin="1dp"
-            android:textSize="43sp"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF"
-            android:text="@string/calc_btn_equals"
-            app:cornerRadius="10dp" />
+            <Button
+                android:id="@+id/btn_decimal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_decimal"
+                app:cornerRadius="10dp" />
 
-    </GridLayout>
+            <!-- イコールボタン（2列分の幅） -->
+            <Button
+                android:id="@+id/btn_equal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_margin="2dp"
+                android:textSize="43sp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:text="@string/calc_btn_equals"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
+
+        <!-- 
+        最下行表示問題対策：安全な表示領域確保のための余白
+        透明なSpaceの代わりにより適切な方法で実装
+        -->
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

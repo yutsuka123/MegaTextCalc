@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MegaTextCalc"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MegaTextCalc">
             <intent-filter>
@@ -36,4 +36,3 @@
     </application>
 
 </manifest>
-

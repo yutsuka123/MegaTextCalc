@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="4dp">
+
+    <!-- 説明文 -->
+    <TextView
+        android:id="@+id/donationDescription"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="@string/donate_description"
+        android:textSize="14sp" />
+
+    <!-- 説明文とボタンの間に7行分のスペースを追加 -->
+
+    <!-- 小額支援のボタン -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/transparent" />
+
+    <Button
+        android:id="@+id/btnSmallDonation"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:minHeight="0dp"
+        android:text="120円を支援"
+        android:textSize="14sp" />
+
+    <!-- 中額支援のボタン -->
+    <Button
+        android:id="@+id/btnMediumDonation"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="0dp"
+        android:minHeight="0dp"
+        android:text="480円を支援"
+        android:textSize="14sp" />
+
+    <!-- 大額支援のボタン -->
+    <Button
+        android:id="@+id/btnLargeDonation"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="0dp"
+        android:minHeight="0dp"
+        android:text="1,000円を支援"
+        android:textSize="14sp" />
+
+    <!-- 透明なダミーボタン（スペース確保用） -->
+    <Button
+        android:id="@+id/btnDummy"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_marginTop="1dp"
+        android:background="#00000000"
+        android:minHeight="0dp"
+        android:clickable="false"
+        android:enabled="false"
+        android:focusable="false"
+        android:visibility="visible" />
+
+    <!-- もう一つ余分なスペース確保用のView -->
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="53dp"
+        android:background="@android:color/transparent" />
+
+</LinearLayout>
