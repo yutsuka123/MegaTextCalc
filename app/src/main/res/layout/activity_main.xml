@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <ImageButton
+            <!-- <ImageButton
                 android:id="@+id/btnMenu"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -25,7 +25,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/menu_title"
-                app:srcCompat="@android:drawable/ic_menu_more" />
+                app:srcCompat="@android:drawable/ic_menu_more" /> -->
 
         </com.google.android.material.appbar.MaterialToolbar>
 

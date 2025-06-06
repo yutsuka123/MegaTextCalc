@@ -30,6 +30,11 @@ class PreferencesHelper(context: Context) {
         get() = prefs.getInt(KEY_NUMBER_RANGE, 2)
         set(value) = prefs.edit().putInt(KEY_NUMBER_RANGE, value).apply()
 
+    // すべての音OFF設定
+    var isAllSoundOff: Boolean
+        get() = prefs.getBoolean("all_sound_off", false)
+        set(value) = prefs.edit().putBoolean("all_sound_off", value).apply()
+
     // 数値範囲レベルに基づいて、制限値を取得する
     fun getNumberRangeMin(): Double {
         return when (numberRangeLevel) {

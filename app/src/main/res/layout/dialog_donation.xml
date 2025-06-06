@@ -12,20 +12,18 @@
     <TextView
         android:id="@+id/donationDescription"
         android:layout_width="match_parent"
-        android:layout_height="124dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="2dp"
-        android:ellipsize="end"
-        android:maxLines="3"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
         android:text="@string/donate_description"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp" />
 
     <!-- 説明文とボタンの間に7行分のスペースを追加 -->
 
     <!-- 小額支援のボタン -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="24dp"
         android:background="@android:color/transparent" />
 
     <Button

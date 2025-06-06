@@ -59,6 +59,12 @@ object SoundPlayer {
         onCompletion: (() -> Unit)? = null,
         exclusive: Boolean = false
     ) {
+        val preferencesHelper = PreferencesHelper(context)
+        if (preferencesHelper.isAllSoundOff) {
+            onCompletion?.invoke()
+            if (exclusive) processQueue()
+            return
+        }
         if (exclusive) {
             playQueue.add(PlayRequest(context, fileName, onCompletion))
             processQueue()

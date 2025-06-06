@@ -223,7 +223,8 @@ class BillingClientHelper(private val context: Context) {
         // ダイアログの説明文を設定（短く表示）
         val descriptionText = dialogView.findViewById<TextView>(R.id.donationDescription)
         descriptionText.text = activity.getString(R.string.donate_description)
-        descriptionText.maxLines = 2
+        descriptionText.maxLines = Integer.MAX_VALUE
+        descriptionText.ellipsize = null
 
         // 支援ボタンの設定
         setupDonationButton(dialogView, R.id.btnSmallDonation, sortedProducts, 0, activity, dialog)

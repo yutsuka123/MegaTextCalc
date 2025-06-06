@@ -189,21 +189,6 @@ fun MegaTextCalcApp(
                         val activity = LocalContext.current as? MainActivity
                         Box(modifier = Modifier.fillMaxSize()) {
                             CalculatorScreen()
-
-                            // 右上のメニューボタン
-                            Button(
-                                onClick = { activity?.showMenuBottomSheet() },
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color.LightGray,
-                                    contentColor = Color.Black
-                                ),
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .size(40.dp)
-                                    .align(Alignment.TopEnd)
-                            ) {
-                                Text("≡", fontSize = 20.sp)
-                            }
                         }
                     }
                     composable("settings") {

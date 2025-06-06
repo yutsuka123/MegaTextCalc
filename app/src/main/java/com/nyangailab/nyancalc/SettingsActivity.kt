@@ -73,6 +73,8 @@ fun SettingsScreenActivity(
     // 設定値を読み込む
     var soundEnabled by remember { mutableStateOf(prefsHelper.isSoundEnabled) }
     var displayRangeIndex by remember { mutableStateOf(prefsHelper.numberRangeLevel - 1) }
+    var allSoundOn by remember { mutableStateOf(!prefsHelper.isAllSoundOff) }
+    var catVoiceOn by remember { mutableStateOf(prefsHelper.isSoundEnabled) }
 
     val displayRangeOptions = listOf(
         "-999999999.999999999～999999999.999999999",
@@ -117,26 +119,37 @@ fun SettingsScreenActivity(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // 音声設定
-            Text(
-                text = stringResource(id = R.string.sound_settings),
-                style = MaterialTheme.typography.h6,
-                fontWeight = FontWeight.Bold
-            )
+            // 一番上に全体の音声
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = "猫ボイスを有効にする",
-                    modifier = Modifier.weight(1f)
-                )
+                Text("音声ON/OFF", modifier = Modifier.weight(1f))
                 Switch(
-                    checked = soundEnabled,
+                    checked = allSoundOn,
                     onCheckedChange = {
-                        soundEnabled = it
-                        saveSoundSetting(it) // 設定変更時に即座に保存
+                        allSoundOn = it
+                        prefsHelper.isAllSoundOff = !it
+                        if (!it) {
+                            catVoiceOn = false
+                            prefsHelper.isSoundEnabled = false
+                        }
                     }
+                )
+            }
+            // すぐ下に猫の声
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("猫の鳴き声 ON/OFF", modifier = Modifier.weight(1f))
+                Switch(
+                    checked = catVoiceOn,
+                    onCheckedChange = {
+                        catVoiceOn = it
+                        prefsHelper.isSoundEnabled = it
+                    },
+                    enabled = allSoundOn // 全体音声OFF時は猫ボイスもOFF
                 )
             }
 

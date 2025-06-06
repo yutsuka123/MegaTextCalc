@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nyangailab.nyancalc.billing.BillingClientHelper
+import com.nyangailab.nyancalc.util.PreferencesHelper
 
 class AboutDialogFragment : DialogFragment() {
 

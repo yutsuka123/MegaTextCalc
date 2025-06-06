@@ -87,30 +87,40 @@ fun CalculatorScreen() {
                 .weight(10f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-            val logoExists = remember {
-                context.resources.getIdentifier("rogo", "drawable", context.packageName) != 0
-            }
-            if (logoExists) {
+                val logoExists = remember {
+                    context.resources.getIdentifier("rogo", "drawable", context.packageName) != 0
+                }
+
+                if (logoExists) {
                     Image(
-                    painter = painterResource(id = R.drawable.rogo),
-                    contentDescription = "App Icon",
-                    modifier = Modifier.size(32.dp).padding(start = 8.dp)
-                )
-            } else {
-                Text(
-                    text = "MegaTextCalc",
-                    fontSize = (18f * scale).sp,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
+                        painter = painterResource(id = R.drawable.rogo),
+                        contentDescription = "App Icon",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .padding(start = 8.dp)
+                    )
+                } else {
+                    Text(
+                        text = "MegaTextCalc",
+                        fontSize = (18f * scale).sp,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                // 右端メニューボタン（≡）
+                IconButton(
+                    onClick = {
+                        // MainActivity の BottomSheetMenu を表示
+                        (context as? MainActivity)?.showMenuBottomSheet()
+                    },
+                    modifier = Modifier
+                        .size(32.dp)
+                ) {
+                    Text("≡", fontSize = 18.sp, color = Color.Black)
+                }
             }
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { /* 設定画面遷移 */ }) {
-                Icon(
-                    painter = painterResource(id = android.R.drawable.ic_menu_preferences),
-                    contentDescription = "Settings"
-                )
-            }
-        }
         // 3. 上部表示部（35%）
         Column(
                     modifier = Modifier
@@ -120,21 +130,119 @@ fun CalculatorScreen() {
         ) {
             val displayFontSize = (18f * scale * 1.5f).sp
             val minFontSize = 8.sp
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                AutoResizeText("M1:", maxDigits, displayFontSize, minFontSize, Modifier.weight(1f), maxLines = 2)
-                AutoResizeText(memory1, maxDigits, displayFontSize, minFontSize, Modifier.weight(3f), maxLines = 2)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    // Column の高さを4等分し、他領域に影響しない
+                    .weight(1f)
+                    .padding(vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AutoResizeText(
+                    "M1:",
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier.weight(1f),
+                    maxLines = 2
+                )
+                AutoResizeText(
+                    formatNumberForDisplay(memory1),
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier
+                        .weight(3f)
+                        .clickable(enabled = memory1.isNotEmpty()) {
+                            if (expression.isEmpty() || expression == "0" ||
+                                expression.lastOrNull() in listOf('+', '-', '*', '/')) {
+                                expression = if (expression.isEmpty() || expression == "0") memory1 else expression + memory1
+                            }
+                        },
+                    maxLines = 2
+                )
             }
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                AutoResizeText("M2:", maxDigits, displayFontSize, minFontSize, Modifier.weight(1f), maxLines = 2)
-                AutoResizeText(memory2, maxDigits, displayFontSize, minFontSize, Modifier.weight(3f), maxLines = 2)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    // Column の高さを4等分し、他領域に影響しない
+                    .weight(1f)
+                    .padding(vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AutoResizeText(
+                    "M2:",
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier.weight(1f),
+                    maxLines = 2
+                )
+                AutoResizeText(
+                    formatNumberForDisplay(memory2),
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier
+                        .weight(3f)
+                        .clickable(enabled = memory2.isNotEmpty()) {
+                            if (expression.isEmpty() || expression == "0" ||
+                                expression.lastOrNull() in listOf('+', '-', '*', '/')) {
+                                expression = if (expression.isEmpty() || expression == "0") memory2 else expression + memory2
+                            }
+                        },
+                    maxLines = 2
+                )
             }
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                AutoResizeText("計算", maxDigits, displayFontSize, minFontSize, Modifier.weight(1f), maxLines = 2)
-                AutoResizeText(expression, maxDigits, displayFontSize, minFontSize, Modifier.weight(3f), maxLines = 2)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    // Column の高さを4等分し、他領域に影響しない
+                    .weight(1f)
+                    .padding(vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AutoResizeText(
+                    "計算",
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier.weight(1f),
+                    maxLines = 2
+                )
+                AutoResizeText(
+                    formatNumberForDisplay(expression),
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier.weight(3f),
+                    maxLines = 2
+                )
             }
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                AutoResizeText("結果", maxDigits, displayFontSize, minFontSize, Modifier.weight(1f), maxLines = 2)
-                AutoResizeText(result, maxDigits, displayFontSize, minFontSize, Modifier.weight(3f), maxLines = 2)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    // Column の高さを4等分し、他領域に影響しない
+                    .weight(1f)
+                    .padding(vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AutoResizeText(
+                    "結果",
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier.weight(1f),
+                    maxLines = 2
+                )
+                AutoResizeText(
+                    formatNumberForDisplay(result),
+                    maxDigits,
+                    displayFontSize,
+                    minFontSize,
+                    Modifier.weight(3f),
+                    maxLines = 2
+                )
             }
         }
         // 4. 上部キー部と下部キー部の間（3%）
@@ -199,32 +307,39 @@ fun CalculatorScreen() {
                             }
                             "=" -> {
                                 if (expression.isNotEmpty()) {
-                            val eval = evaluateExpression(expression, prefsHelper)
-                                        result = eval
-                                        if (eval != "エラー") {
-                                            if (memoryToggle) memory1 = eval else memory2 = eval
-                                            memoryToggle = !memoryToggle
-                                            lastResultCalculated = true
-                            }
-                            // コールバックチェーンで順次再生
-                            SoundPlayer.playAsset(
-                                context = context,
-                                fileName = "equal.mp3",
-                                exclusive = true,
-                                onCompletion = {
-                                    val catFile = SoundPlayer.getRandomCatSound(context)
-                                    if (catFile.isNotEmpty()) {
+                                    // 1) 式を即時評価し、UI とメモリを更新
+                                    val eval = evaluateExpression(expression)
+                                    result = eval
+
+                                    if (eval != "エラー") {
+                                        if (memoryToggle) memory1 = eval else memory2 = eval
+                                        memoryToggle = !memoryToggle
+                                        lastResultCalculated = true
+
+                                        // 2) サウンド連鎖: イコール(専有) → 猫(専有) → 答え
                                         SoundPlayer.playAsset(
                                             context = context,
-                                            fileName = catFile,
+                                            fileName = "equal.mp3",
                                             exclusive = true,
-                                            onCompletion = { SoundPlayer.playAnswerFlexible(context, eval) {} }
+                                            onCompletion = {
+                                                val prefs = PreferencesHelper(context)
+                                                val catFile = if (prefs.isSoundEnabled) SoundPlayer.getRandomCatSound(context) else ""
+                                                if (catFile.isNotEmpty()) {
+                                                    SoundPlayer.playAsset(
+                                                        context = context,
+                                                        fileName = catFile,
+                                                        exclusive = true,
+                                                        onCompletion = { SoundPlayer.playAnswerFlexible(context, eval) {} }
+                                                    )
+                                                } else {
+                                                    SoundPlayer.playAnswerFlexible(context, eval) {}
+                                                }
+                                            }
                                         )
                                     } else {
-                                                SoundPlayer.playAnswerFlexible(context, eval) {}
+                                        // エラー時は効果音のみ
+                                        SoundPlayer.playAsset(context, "equal.mp3")
                                     }
-                                }
-                            )
                                 }
                             }
                             "+", "-", "*", "/" -> {
@@ -375,74 +490,160 @@ fun CalculatorButton(
  }
 
 /**
- * 四則演算の簡易評価関数（例：1+2*3 → 7）
- * 必要に応じて拡張してください
+ * 表示部のテキストを自動で縮小し、2行まで見切れずに表示するためのコンポーザブル。
+ * 設計意図：
+ *   - 計算式や結果が長い場合でも2行に収めて見切れを防ぐ。
+ *   - これをしないと長い計算式や結果が...で省略されてしまうため必須。
+ *   - フォントサイズは2行に収まるまで段階的に小さくする。
+ * デグレ防止：
+ *   - レイアウト変更やフォントサイズ調整時に2行目が重なったり見切れたりするバグを防ぐ。
+ *   - 2行表示・縮小ロジックを必ず維持すること。
  */
-fun evaluateExpression(expr: String, prefsHelper: PreferencesHelper): String { // ★ prefsHelper を引数に追加
+@Composable
+fun AutoResizeText(
+    text: String,
+    charLimit: Int,
+    baseFontSize: TextUnit,
+    minFontSize: TextUnit,
+    modifier: Modifier = Modifier,
+    maxLines: Int = 2
+) {
+    // 2行収め用フォントサイズ計算:
+    // 60dp 高の行に lineHeight = font*1.2 × 2 が収まるよう上限を設定
+    val maxFontByHeight = 22f // 行高 ≈52dp に 2行収める上限を22sp程度に設定
+
+    val computedFontSize = if (text.length > charLimit) {
+        val ratio = charLimit.toFloat() / text.length
+        (baseFontSize.value * ratio).coerceAtLeast(minFontSize.value)
+            .coerceAtMost(maxFontByHeight)
+    } else {
+        baseFontSize.value.coerceAtMost(maxFontByHeight)
+    }.sp
+
+    Text(
+        text = text,
+        fontSize = computedFontSize,
+        maxLines = maxLines,
+        softWrap = true,
+        overflow = TextOverflow.Clip,
+        lineHeight = (computedFontSize.value * 1.2f).sp,
+        modifier = modifier.padding(horizontal = 2.dp)
+    )
+}
+
+/**
+ * 四則演算式を安全にパース・計算し、カンマ区切りで表示する関数。
+ * 設計意図：
+ *   - ユーザーが入力した計算式（例：10000+0.3333や3,500+2,500など）を正しく評価し、
+ *     結果を常に3桁区切りで表示する。
+ *   - カンマ（,）は計算前にすべて除去する。
+ *   - 小数点や負号、演算子の優先順位も正しく処理。
+ * デグレ防止：
+ *   - 以前の実装で「10000+0.3333→0.3333」など誤った結果になるバグがあったため、
+ *     このRPNパーサーで必ず正しい計算結果を保証する。
+ *   - 計算式評価ロジックを変更する場合は必ずテストケース（1000+0.333, 1+2*3, (1+2)*3等）で正しい結果を確認すること。
+ *   - 結果は常にカンマ区切り・指数表現禁止で返す。
+ */
+fun evaluateExpression(expr: String): String {
+    // カンマを除去してから解析
+    val cleanExpr = expr.replace(",", "")
+
+    // トークン化（数値, 演算子, 括弧）
+    // Kotlin の通常の文字列リテラルでは "\\-" のように二重にエスケープが必要になるため、
+    // 可読性と安全性を考慮して raw 文字列（""" ～ """) を使用する。
+    val tokens = Regex("""([+\-*/()])""")
+        .replace(cleanExpr, " $1 ")
+        .trim()
+        .split(Regex("\\s+"))
+        .filter { it.isNotEmpty() }
+
+    // 中置→後置変換用スタック
+    val output = mutableListOf<String>()
+    val opStack = mutableListOf<String>()
+    val precedence = mapOf("+" to 1, "-" to 1, "*" to 2, "/" to 2)
+
+    try {
+        // Shunting-yard
+        tokens.forEach { tok ->
+            when {
+                tok.toBigDecimalOrNull() != null -> output.add(tok)
+                tok == "(" -> opStack.add(tok)
+                tok == ")" -> {
+                    while (opStack.isNotEmpty() && opStack.last() != "(") {
+                        output.add(opStack.removeAt(opStack.lastIndex))
+                    }
+                    if (opStack.isEmpty() || opStack.removeAt(opStack.lastIndex) != "(") {
+                        throw IllegalArgumentException("括弧の対応が取れていません")
+                    }
+                }
+                tok in precedence -> {
+                    while (opStack.isNotEmpty() && opStack.last() in precedence &&
+                        precedence[opStack.last()]!! >= precedence[tok]!!) {
+                        output.add(opStack.removeAt(opStack.lastIndex))
+                    }
+                    opStack.add(tok)
+                }
+                else -> throw IllegalArgumentException("不正なトークン: $tok")
+            }
+        }
+        while (opStack.isNotEmpty()) {
+            val op = opStack.removeAt(opStack.lastIndex)
+            if (op in listOf("(", ")")) throw IllegalArgumentException("括弧の対応が取れていません")
+            output.add(op)
+        }
+
+        // RPN 評価（BigDecimal で高精度計算）
+        val evalStack = mutableListOf<java.math.BigDecimal>()
+        val mc = java.math.MathContext.DECIMAL64
+        output.forEach { tok ->
+            when {
+                tok.toBigDecimalOrNull() != null -> evalStack.add(tok.toBigDecimal())
+                tok in precedence -> {
+                    if (evalStack.size < 2) throw IllegalArgumentException("式が不正です")
+                    val b = evalStack.removeAt(evalStack.lastIndex)
+                    val a = evalStack.removeAt(evalStack.lastIndex)
+                    val res = when (tok) {
+                        "+" -> a.add(b, mc)
+                        "-" -> a.subtract(b, mc)
+                        "*" -> a.multiply(b, mc)
+                        "/" -> a.divide(b, mc)
+                        else -> throw IllegalStateException()
+                    }
+                    evalStack.add(res)
+                }
+            }
+        }
+
+        if (evalStack.size != 1) return "エラー"
+
+        val result = evalStack.first().stripTrailingZeros()
+
+        // 表示フォーマット：整数部分にカンマ、小数部最大10桁（末尾0は削除）
+        val resultStr = result.toPlainString()
+        return formatNumberForDisplay(resultStr)
+    } catch (e: Exception) {
+        return "エラー"
+    }
+}
+
+fun formatNumberForDisplay(raw: String): String {
     return try {
-        val cleanExpr = expr.replace("×", "*").replace("÷", "/")
-        val result = object : Any() {
-            var pos = -1
-            var ch = 0
-            fun nextChar() { ch = if (++pos < cleanExpr.length) cleanExpr[pos].code else -1 } // ★ toInt() を code に変更
-            fun eat(charToEat: Int): Boolean {
-                while (ch == ' '.code) nextChar() // ★ toInt() を code に変更
-                if (ch == charToEat) { nextChar(); return true }
-                return false
-            }
-            fun parse(): Double {
-                nextChar()
-                val x = parseExpression()
-                if (pos < cleanExpr.length) throw RuntimeException("Unexpected: " + ch.toChar())
-                return x
-            }
-            fun parseExpression(): Double {
-                var x = parseTerm()
-                while (true) {
-                    when {
-                        eat('+'.code) -> x += parseTerm() // ★ toInt() を code に変更
-                        eat('-'.code) -> x -= parseTerm() // ★ toInt() を code に変更
-                        else -> return x
-                    }
-                }
-            }
-            fun parseTerm(): Double {
-                var x = parseFactor()
-                while (true) {
-                    when {
-                        eat('*'.code) -> x *= parseFactor() // ★ toInt() を code に変更
-                        eat('/'.code) -> { // ★ toInt() を code に変更
-                            val divisor = parseFactor()
-                            if (divisor == 0.0) throw ArithmeticException("除算エラー")
-                            x /= divisor
-                        }
-                        else -> return x
-                    }
-                }
-            }
-            fun parseFactor(): Double {
-                if (eat('+'.code)) return parseFactor() // ★ toInt() を code に変更
-                if (eat('-'.code)) return -parseFactor() // ★ toInt() を code に変更
-                var x: Double
-                val startPos = pos
-                if (eat('('.code)) { // ★ toInt() を code に変更
-                    x = parseExpression()
-                    eat(')'.code) // ★ toInt() を code に変更
-                } else if ((ch in '0'.code..'9'.code) || ch == '.'.code) { // ★ toInt() を code に変更
-                    while ((ch in '0'.code..'9'.code) || ch == '.'.code) nextChar() // ★ toInt() を code に変更
-                    x = cleanExpr.substring(startPos, pos).toDouble()
-                } else {
-                    throw RuntimeException("Unexpected: " + ch.toChar())
-                }
-                return x
-            }
-        }.parse()
-        // カンマ区切り・指数表現禁止
-        val formatted = if (result % 1.0 == 0.0) "% ,d".format(result.toLong())
-                        else "% ,.${prefsHelper.getDecimalPlaces()}f".format(result).trimEnd('0').trimEnd('.')
-        formatted
-    } catch (e: Exception) { // TODO: この例外変数は現在使用されていません
-        "エラー"
+        // カンマを除去して数値化 → 文字列化で指数表記を防止
+        val plain = java.math.BigDecimal(raw.replace(",", "")).stripTrailingZeros().toPlainString()
+
+        // 整数か小数かで処理分岐
+        return if (!plain.contains('.')) {
+            // 整数のみ → 3桁区切り
+            "% ,d".format(plain.toLong())
+        } else {
+            val (intStr, decStr) = plain.split('.')
+            val formattedInt = "% ,d".format(intStr.toLong())
+            val trimmedDec = decStr.trimEnd('0')
+            if (trimmedDec.isEmpty()) formattedInt else "$formattedInt.$trimmedDec"
+        }
+    } catch (e: Exception) {
+        // 何らかの変換失敗時は入力をそのまま返す
+        raw
     }
 }
 
@@ -456,26 +657,3 @@ fun canAppendNumber(current: String, append: String, charLimit: Int): Boolean {
     return append.all { it.isDigit() || it == '.' }
 }
 
-@Composable
-fun AutoResizeText(
-    text: String,
-    charLimit: Int,
-    baseFontSize: TextUnit,
-    minFontSize: TextUnit,
-    modifier: Modifier = Modifier,
-    maxLines: Int = 2 // 2行まで許容
-) {
-    val fontSize = if (text.length > charLimit) {
-        val ratio = charLimit.toFloat() / text.length
-        (baseFontSize.value * ratio).coerceAtLeast(minFontSize.value).sp
-    } else {
-        baseFontSize
-    }
-    Text(
-        text = text,
-        fontSize = fontSize,
-        maxLines = maxLines,
-        softWrap = true,
-        modifier = modifier.padding(horizontal = 2.dp)
-    )
- }
