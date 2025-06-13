@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -74,15 +73,9 @@ class MainActivity : AppCompatActivity() {
         val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
         bottomSheetDialog.setContentView(bottomSheetView)
 
-        // バージョン情報をセット
+        // BuildConfig からバージョン名を取得し表示
         val versionInfo = bottomSheetView.findViewById<android.widget.TextView>(R.id.tvVersionInfo)
-        try {
-            val packageInfo = packageManager.getPackageInfo(packageName, 0)
-            val versionName = packageInfo.versionName
-            versionInfo.text = "Version: $versionName"
-        } catch (e: Exception) {
-            versionInfo.text = "Version: 不明"
-        }
+        versionInfo.text = "Version: ${BuildConfig.VERSION_NAME}"
 
         // 設定ボタンのリスナー設定
         bottomSheetView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSettings).setOnClickListener {
@@ -115,21 +108,15 @@ class MainActivity : AppCompatActivity() {
 
         // バージョン情報ボタンのリスナー設定
         bottomSheetView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnVersionInfo).setOnClickListener {
-            try {
-                val packageInfo = packageManager.getPackageInfo(packageName, 0)
-                val versionName = packageInfo.versionName
-                val message = "アプリバージョン: $versionName\n" +
-                        "最終更新: 2025年6月5日"
+            val message = "アプリバージョン: ${BuildConfig.VERSION_NAME}\n" +
+                    "最終更新: ${BuildConfig.BUILD_DATE}"
 
-                val dialog = AlertDialog.Builder(this)
-                    .setTitle("バージョン情報")
-                    .setMessage(message)
-                    .setPositiveButton("OK", null)
-                    .create()
-                dialog.show()
-            } catch (e: Exception) {
-                Toast.makeText(this, "バージョン情報を取得できませんでした", Toast.LENGTH_SHORT).show()
-            }
+            AlertDialog.Builder(this)
+                .setTitle("バージョン情報")
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .create()
+                .show()
         }
 
         // 寄付ボタンのリスナー設定

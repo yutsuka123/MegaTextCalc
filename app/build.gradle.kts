@@ -1,3 +1,6 @@
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -71,12 +74,15 @@ android {
         applicationId = "com.nyangailab.nyancalc"
         minSdk = 25
         targetSdk = 34
-        versionCode = 11115
+        versionCode = 11121 //正式リリースは便宜的に***99とする。常に数字が上昇するようにする。
         // 以前の11102から変更
-        versionName = "1.1.1-beta15" +
+        versionName = "1.1.1-beta21" +
                 "" // 以前のver1.1.1Beta02から変更
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // ビルド日をBuildConfigに埋め込み
+        val buildDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日"))
+        buildConfigField("String", "BUILD_DATE", "\"$buildDate\"")
     }
 
     buildTypes {
@@ -98,6 +104,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
 
     composeOptions {

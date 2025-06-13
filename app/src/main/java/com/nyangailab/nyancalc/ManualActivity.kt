@@ -147,7 +147,7 @@ fun ManualContent() {
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(text = "アプリが気に入ったら、メニ��ーの開発者支援からご支援いただけると励みになります。")
+        Text(text = "アプリが気に入ったら、メニューの開発者支援からご支援いただけると励みになります。")
         Spacer(modifier = Modifier.height(24.dp))
     }
 }

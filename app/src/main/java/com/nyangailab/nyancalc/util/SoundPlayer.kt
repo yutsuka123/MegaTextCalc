@@ -26,6 +26,32 @@ object SoundPlayer {
     // デバッグモードを無効化（ポップアップ非表示）
     private const val DEBUG_MODE = false
 
+    // アイドルタイムアウト（ms）
+    private const val IDLE_TIMEOUT_MS = 2000L
+
+    private val idleHandler = Handler(Looper.getMainLooper())
+    private val idleRunnable = Runnable {
+        Log.d(TAG, "[IdleTimer] timeout → プレーヤー状態をリセット")
+        forceReset()
+    }
+
+    /**
+     * タイムアウトをリセットし、再スケジュールする
+     */
+    private fun rescheduleIdleTimer() {
+        idleHandler.removeCallbacks(idleRunnable)
+        idleHandler.postDelayed(idleRunnable, IDLE_TIMEOUT_MS)
+    }
+
+    /**
+     * 内部状態を強制的にリセット
+     * playQueue をクリアし isPlaying を false に戻す
+     */
+    private fun forceReset() {
+        playQueue.clear()
+        isPlaying = false
+    }
+
     data class PlayRequest(
         val context: Context,
         val fileName: String,
@@ -69,6 +95,7 @@ object SoundPlayer {
             playQueue.add(PlayRequest(context, fileName, onCompletion))
             processQueue()
         } else {
+            Log.d(TAG, "playAsset(non-exclusive): $fileName")
             // 短い効果音は即時多重再生
             try {
                 val assetManager = context.assets
@@ -85,10 +112,12 @@ object SoundPlayer {
                     mp.release()
                     true
                 }
-                mp.prepareAsync()
                 mp.setOnPreparedListener { mp.start() }
+                mp.prepareAsync()
+                rescheduleIdleTimer()
             } catch (e: Exception) {
                 onCompletion?.invoke()
+                Log.e(TAG, "playAsset error: $fileName", e)
             }
         }
     }
@@ -96,6 +125,7 @@ object SoundPlayer {
     private fun processQueue() {
         if (isPlaying || playQueue.isEmpty()) return
         isPlaying = true
+        rescheduleIdleTimer()
         val req = playQueue.removeFirst()
         try {
             val assetManager = req.context.assets
@@ -116,12 +146,14 @@ object SoundPlayer {
                 processQueue()
                 true
             }
-            mp.prepareAsync()
             mp.setOnPreparedListener { mp.start() }
+            mp.prepareAsync()
+            rescheduleIdleTimer()
         } catch (e: Exception) {
             req.onCompletion?.invoke()
             isPlaying = false
             processQueue()
+            Log.e(TAG, "processQueue error: ${req.fileName}", e)
         }
     }
 
@@ -146,6 +178,7 @@ object SoundPlayer {
      * ランダムな猫の音声を再生する
      */
     private fun playRandomCatSound(context: Context, onCompletion: (() -> Unit)? = null) {
+        rescheduleIdleTimer()
         try {
             val assetManager = context.assets
             val allFiles = assetManager.list("sound") ?: emptyArray()

@@ -308,7 +308,7 @@ fun CalculatorScreen() {
                             "=" -> {
                                 if (expression.isNotEmpty()) {
                                     // 1) 式を即時評価し、UI とメモリを更新
-                                    val eval = evaluateExpression(expression)
+                                    val eval = evaluateExpression(expression, prefsHelper.getNumberRangeMin().toDouble(), prefsHelper.getNumberRangeMax().toDouble(), prefsHelper.getDecimalPlaces())
                                     result = eval
 
                                     if (eval != "エラー") {
@@ -372,16 +372,17 @@ fun CalculatorScreen() {
                                 }
                             }
                             else -> {
+                                val charLimit = prefsHelper.charLimit // 計算範囲ではなく、式の文字数制限を取得
                                 // 数字ボタンの処理
                                 // 結果表示後に数字を押したら式をクリア
                                 if (lastResultCalculated) {
-                            if (canAppendNumber("", buttonValue, maxDigits)) {
+                                    if (canAppendNumber("", buttonValue, charLimit)) {
                                         expression = buttonValue
                                         lastResultCalculated = false
                                     }
                                 } else {
                                     // 文字数制限（設定に基づく）を追加
-                            if (expression.length < maxDigits && canAppendNumber(expression, buttonValue, maxDigits)) {
+                                    if (expression.length < charLimit && canAppendNumber(expression, buttonValue, charLimit)) {
                                         expression += buttonValue
                                     }
                                 }
@@ -544,7 +545,7 @@ fun AutoResizeText(
  *   - 計算式評価ロジックを変更する場合は必ずテストケース（1000+0.333, 1+2*3, (1+2)*3等）で正しい結果を確認すること。
  *   - 結果は常にカンマ区切り・指数表現禁止で返す。
  */
-fun evaluateExpression(expr: String): String {
+fun evaluateExpression(expr: String, minValue: Double, maxValue: Double, decimalPlaces: Int): String {
     // カンマを除去してから解析
     val cleanExpr = expr.replace(",", "")
 
@@ -616,10 +617,24 @@ fun evaluateExpression(expr: String): String {
 
         if (evalStack.size != 1) return "エラー"
 
-        val result = evalStack.first().stripTrailingZeros()
+        // 計算結果
+        var result = evalStack.first()
 
-        // 表示フォーマット：整数部分にカンマ、小数部最大10桁（末尾0は削除）
-        val resultStr = result.toPlainString()
+        // 1) 小数部の丸め（四捨五入）
+        result = try {
+            result.setScale(decimalPlaces, java.math.RoundingMode.HALF_UP)
+        } catch (e: Exception) {
+            result
+        }
+
+        // 2) 範囲チェック
+        val doubleVal = try { result.toDouble() } catch (e: Exception) { Double.NaN }
+        if (doubleVal.isNaN() || doubleVal < minValue || doubleVal > maxValue) {
+            return "エラー"
+        }
+
+        // 3) 表示フォーマット
+        val resultStr = result.stripTrailingZeros().toPlainString()
         return formatNumberForDisplay(resultStr)
     } catch (e: Exception) {
         return "エラー"

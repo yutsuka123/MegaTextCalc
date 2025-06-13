@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nyangailab.nyancalc.util.PreferencesHelper
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun SettingsScreen(
@@ -56,7 +57,6 @@ fun SettingsScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
             // 音声設定
@@ -158,8 +158,14 @@ fun SettingsScreen(
                     .padding(vertical = 16.dp)
             ) {
                 Text(
-                    text = "計算可能な数値範囲",
+                    text = "計算可能な数値範囲 (表示桁数も制限)",
                     fontSize = 18.sp,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = "ここで選択した範囲は \"入力できる数値\" と \"表示される桁数\" の上限を同時に定義します。",
+                    fontSize = 12.sp,
+                    color = Color.Gray,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
@@ -178,7 +184,7 @@ fun SettingsScreen(
                         }
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("-999999999.999999999～999999999.999999999")
+                    Text("① -999,999,999.999,999,999～999,999,999.999,999,999")
                 }
 
                 // ラジオボタン：レベル2
@@ -196,7 +202,7 @@ fun SettingsScreen(
                         }
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("-999999999.999999～999999999.999999（デフォルト）")
+                    Text("② -999,999,999.999,999～999,999,999.999,999")
                 }
 
                 // ラジオボタン：レベル3
@@ -214,41 +220,33 @@ fun SettingsScreen(
                         }
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("-999999.999～999999.999")
+                    Text("③ -999,999.999～999,999.999（デフォルト）")
+                }
+
+                // ラジオボタン：レベル4
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = numberRangeLevel == 4,
+                        onClick = {
+                            numberRangeLevel = 4
+                            prefsHelper.numberRangeLevel = 4
+                        }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("④ -99,999.99～99,999.99")
                 }
             }
 
             Divider()
 
-            // マニュアル
-            Button(
-                onClick = onShowManual,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text("取扱説明書")
-            }
-
-            // 免責事項・アプリについて
-            Button(
-                onClick = onShowAbout,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text("このアプリについて・免責事項")
-            }
-
-            // プライバシーポリシーボタンを追加
-            Button(
-                onClick = onShowPrivacyPolicy,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text("プライバシーポリシー")
-            }
+            // ※マニュアル・開発者支援・プライバシーポリシーへの導線は
+            //   メニュー画面から遷移できるため、ここでは非表示とする
+            //   （2025/06/07 要件変更）
         }
     }
 }

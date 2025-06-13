@@ -77,14 +77,16 @@ fun SettingsScreenActivity(
     var catVoiceOn by remember { mutableStateOf(prefsHelper.isSoundEnabled) }
 
     val displayRangeOptions = listOf(
-        "-999999999.999999999～999999999.999999999",
-        "-999999999.999999～999999999.999999（デフォルト）",
-        "-999999.999～999999.999"
+        "① -999,999,999.999,999,999～999,999,999.999,999,999",
+        "② -999,999,999.999,999～999,999,999.999,999",
+        "③ -999,999.999～999,999.999（デフォルト）",
+        "④ -99,999.99～99,999.99"
     )
     val displayRangeDescriptions = listOf(
         "大きな数値と高精度な小数部が必要な計算向け",
         "一般的な計算に最適なバランス設定",
-        "シンプルで見やすい表示が好みの方向け"
+        "シンプルで見やすい表示が好みの方向け",
+        "小数2桁までのシンプルな計算向け"
     )
 
     // 設定変更時に保存する
@@ -190,6 +192,7 @@ fun SettingsScreenActivity(
 
             Divider(modifier = Modifier.padding(vertical = 8.dp))
 
+            /*
             // 開発者支援セクションの追加
             Text(
                 text = stringResource(id = R.string.donate_title),
@@ -230,6 +233,7 @@ fun SettingsScreenActivity(
             ) {
                 Text(text = "プライバシーポリシーを確認する")
             }
+            */
 
             Spacer(modifier = Modifier.height(16.dp))
             Text(
