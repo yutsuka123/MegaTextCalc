@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment
 class PrivacyPolicyDialogFragment : DialogFragment() {
 
     // プライバシーポリシーのURLを指定されたURLに更新
-    private val url = "https://github.com/nyangailab/application/blob/13ce2b01907bc6ca20eed08c9c99862b29f700a8/privacypolicy_nyancalc.md"
+    private val url = "https://github.com/nyangailab/application/blob/main/privacypolicy_nyancalc.md"
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireActivity())

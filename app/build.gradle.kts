@@ -74,9 +74,9 @@ android {
         applicationId = "com.nyangailab.nyancalc"
         minSdk = 25
         targetSdk = 34
-        versionCode = 11199 //正式リリースは便宜的に***99とする。常に数字が上昇するようにする。
+        versionCode = 11299 //正式リリースは便宜的に***99とする。常に数字が上昇するようにする。
         // 以前の11102から変更
-        versionName = "1.1.1" +
+        versionName = "1.1.2" +
                 "" // 以前のver1.1.1Beta02から変更
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

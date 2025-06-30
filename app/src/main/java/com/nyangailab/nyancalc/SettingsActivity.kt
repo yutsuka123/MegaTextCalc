@@ -28,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var billingClientHelper: BillingClientHelper
 
     // プライバシーポリシーのURL
-    private val privacyPolicyUrl = "https://docs.google.com/document/d/1ilzylPZeh-GL4fBtdT_ErSbDxrcuDbcy7ngdEHHBH4k/edit?usp=sharing"
+    private val privacyPolicyUrl = "https://github.com/nyangailab/application/blob/main/privacypolicy_nyancalc.md"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
