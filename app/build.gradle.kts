@@ -68,15 +68,15 @@ dependencies {
 
 android {
     namespace = "com.nyangailab.nyancalc"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nyangailab.nyancalc"
         minSdk = 25
-        targetSdk = 34
-        versionCode = 11299 //正式リリースは便宜的に***99とする。常に数字が上昇するようにする。
+        targetSdk = 35
+        versionCode = 11399 //正式リリースは便宜的に***99とする。常に数字が上昇するようにする。
         // 以前の11102から変更
-        versionName = "1.1.2" +
+        versionName = "1.1.3" +
                 "" // 以前のver1.1.1Beta02から変更
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
